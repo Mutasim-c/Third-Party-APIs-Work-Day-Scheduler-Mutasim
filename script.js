@@ -2,54 +2,37 @@
 // the code isn't run until the browser has finished rendering all the elements
 // in the html.
 $(function () {
-  // TODO: Add a listener for click events on the save button. This code should
-  // use the id in the containing time-block as a key to save the user input in
-  // local storage. HINT: What does `this` reference in the click listener
-  // function? How can DOM traversal be used to get the "hour-x" id of the
-  // time-block containing the button that was clicked? How might the id be
-  // useful when saving the description in local storage?
-  //
+
   renderLastRegistered();
   function renderLastRegistered() {
     for (var i = 9; i < 18; i++){
       var currentStorage = localStorage.getItem(i.toString());
-      //console.log(currentStorage)
       if (currentStorage) {
         var texts = $('#' + i.toString()).children().eq(1);
         texts.val(currentStorage);
       }
 
     }
-  }
+  }//displays all current local storage to the screen in the same time frame it was saved in
 
   var table = $('#root')
   table.on('click', '.btn', function (event) {
-    var parent = $(this).parent().children().eq(1).val();//user input
-    var idParent = $(this).parent().attr('id');//id name/number
-    //console.log(typeof(parent));
-    //console.log(idParent);
-    //console.log(parent.trim() == "");
+    var textAreaContent = $(this).parent().children().eq(1).val();//user input in text area
+    var idParent = $(this).parent().attr('id');//corresponding id of the block the text is in
 
-    if (parent.trim() == "") {
+    if (textAreaContent.trim() == "") {
       alert("error, input cannot be blank");
     } else {
-      //displayMessage("success", "Registered successfully");
-      localStorage.setItem(idParent, parent);
-      renderLastRegistered();
+      localStorage.setItem(idParent, textAreaContent);
+      //renderLastRegistered();
     }
 
-  });
+  });//on click on save button it will save it to local storage if its not empty if it is it will display alert
 
-  // TODO: Add code to apply the past, present, or future class to each time
-  // block by comparing the id to the current hour. HINTS: How can the id
-  // attribute of each time-block be used to conditionally add or remove the
-  // past, present, and future classes? How can Day.js be used to get the
-  // current hour in 24-hour time?
-  //
-  var time = dayjs().format('H')
+  var time = dayjs().format('H')//gets the current hour and sets it to timw
   for (var i = 0; i < 9; i++){
-    var hour = $('#root').children().eq(i);
-    var ids = hour.attr('id');
+    var hour = $('#root').children().eq(i);//gets each hour corresponding to i in the loop
+    var ids = hour.attr('id');//gets the name id
 
     if(+time > +ids){
       hour.attr('class', 'row time-block past');
@@ -58,13 +41,8 @@ $(function () {
     }else{
       hour.attr('class', 'row time-block present');
     }
-  }
+  }//loops through for each different hour and checks it whether the hour currently to determine if its in the past or present or future
 
-  // TODO: Add code to get any user input that was saved in localStorage and set
-  // the values of the corresponding textarea elements. HINT: How can the id
-  // attribute of each time-block be used to do this?
-  //
-  // TODO: Add code to display the current date in the header of the page.
-  var today = dayjs().format('dddd, MMMM D');
-  $('#currentDay').text(today);
+  var today = dayjs().format('dddd, MMMM D');//get weekday month and day
+  $('#currentDay').text(today);//display date to screen
 });
