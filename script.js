@@ -9,19 +9,33 @@ $(function () {
   // time-block containing the button that was clicked? How might the id be
   // useful when saving the description in local storage?
   //
+  renderLastRegistered();
+  function renderLastRegistered() {
+    for (var i = 9; i < 18; i++){
+      var currentStorage = localStorage.getItem(i.toString());
+      //console.log(currentStorage)
+      if (currentStorage) {
+        var texts = $('#' + i.toString()).children().eq(1);
+        texts.val(currentStorage);
+      }
+
+    }
+  }
+
   var table = $('#root')
   table.on('click', '.btn', function (event) {
     var parent = $(this).parent().children().eq(1).val();//user input
     var idParent = $(this).parent().attr('id');//id name/number
-    //console.log(parent);
+    //console.log(typeof(parent));
     //console.log(idParent);
+    //console.log(parent.trim() == "");
 
-    if (parent == '') {
+    if (parent.trim() == "") {
       alert("error, input cannot be blank");
     } else {
       //displayMessage("success", "Registered successfully");
       localStorage.setItem(idParent, parent);
-      //renderLastRegistered();
+      renderLastRegistered();
     }
 
   });
